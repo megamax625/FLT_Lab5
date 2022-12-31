@@ -2,15 +2,16 @@ Store
 n {
 ID
 {
- Name : Str
- ing
+ Name ++Str
+ ing,
  Fame
- : int
+ ++ int
 }
 N
-etWorth: int
-
+etWorth++ int ,
+CONN Mics ODINKMNOGIM
 }
+?!!
 
 Mics {
 I
@@ -18,6 +19,9 @@ D
  {
 Mark : String
 }
-Cost : 15
-00
+Cost
+ ++15
+00,
+CONN St
+oren 1.1
 }

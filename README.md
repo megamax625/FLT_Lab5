@@ -27,6 +27,8 @@
 [1.1Denomination] DEFAULT '1.1' <br>
 [1.NDenomination] DEFAULT '1.N' <br>
 
+Компиляция программы: <br>
+Внутри директории src **javac Main.java** <br>
 Запуск программы: <br>
 **java Main.java path** либо  **java Main.java path/testname.txt path/syntaxname.txt**  <br>
 где **path** - путь к папке, в которой лежат файлы **test.txt** и **syntax.txt** (**syntax.txt** может быть пустым или не существовать),

@@ -2,7 +2,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
 import utils.*;
 
 public class Main {
@@ -59,13 +60,14 @@ public class Main {
         System.out.println("Success: \n" + testInput);
         System.out.println("Success: \n" + syntaxInput);
 
-        Map<String, String> parameters = Parser.ParseParameterizedTokens(syntaxInput);
+        HashMap<String, String> parameters = Parser.ParseParameterizedTokens(syntaxInput);
+        ArrayList<Table> tables = Parser.ParseTables(testInput, parameters);
     }
 
     private static String GetDefaultSyntax() {
         return """
                 TableDelimeter = , ~
-                AttributeTypeDelimeter = , ~
+                AttributeTypeDelimeter = : ~
                 ConnectionDenomination = CONNECTION ~
                 0.1Denomination = 0.1 ~
                 0.NDenomination = 0.N ~
