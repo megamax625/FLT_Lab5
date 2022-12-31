@@ -57,8 +57,8 @@ public class Main {
         }
         assert testInput != null;
         assert syntaxInput != null;
-        System.out.println("Success: \n" + testInput);
-        System.out.println("Success: \n" + syntaxInput);
+        System.out.println("Success: \n" + testInput.trim());
+        System.out.println("Success: \n" + syntaxInput.trim());
 
         HashMap<String, String> parameters = Parser.ParseParameterizedTokens(syntaxInput);
         ArrayList<Table> tables = Parser.ParseTables(testInput, parameters);

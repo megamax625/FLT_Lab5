@@ -17,11 +17,11 @@ Mics {
 I
 D
  {
-Mark : String
+Mark ++ String
 }
 Cost
- ++15
-00,
+ ++int
+,
 CONN St
 oren 1.1
 }

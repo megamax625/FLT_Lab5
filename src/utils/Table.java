@@ -14,13 +14,13 @@ public class Table {
         this.Connections = new ArrayList<>();
     }
 
-    public class Attribute {
+    public static class Attribute {
         String name;
         String type;
         int KeyStatus; // n = -1 => FK, n = 0 => NO, n >= 1 => AK1.n
     }
-    public class Connection {
-        Table destination;
-        int connType; // 1 = 0.1 | 2 = 0.N | 3 = 1.1 | 4 = 1.N
+    public static class Connection {
+        String destination;
+        String connType; // 1 = 0.1 | 2 = 0.N | 3 = 1.1 | 4 = 1.N
     }
 }
