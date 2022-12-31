@@ -2,6 +2,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Map;
+import utils.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -9,8 +11,8 @@ public class Main {
         String testInput = null, syntaxInput = null;
 
         try {
-            System.out.println(args[1]);
-            System.out.println(args[0]);
+            System.err.format("path to syntax: %s\n", args[1]);
+            System.err.format("path to testInput: %s\n", args[0]);
             File file0 = new File(args[0]);
             File file1 = new File(args[1]);
             if (file0.exists() && file0.isFile() && file1.exists() && file1.isFile()) {
@@ -34,10 +36,6 @@ public class Main {
                         String[] res = ReadInputsFromDirectory(args[0]);
                         testInput = res[0];
                         syntaxInput = res[1];
-                        if (syntaxInput.trim().isEmpty()) {
-                            System.out.println("Syntax file is empty; using default values");
-                            syntaxInput = GetDefaultSyntax();
-                        }
                     } else if (file.isFile()) {
                         testInput = ReadInputsFromFile(file);
                         System.out.println("Syntax file not specified; using default values");
@@ -57,11 +55,11 @@ public class Main {
             System.out.println("IOException gottem");
         }
         assert testInput != null;
-        testInput = testInput.trim();
         assert syntaxInput != null;
-        syntaxInput = syntaxInput.trim();
         System.out.println("Success: \n" + testInput);
         System.out.println("Success: \n" + syntaxInput);
+
+        Map<String, String> parameters = Parser.ParseParameterizedTokens(syntaxInput);
     }
 
     private static String GetDefaultSyntax() {

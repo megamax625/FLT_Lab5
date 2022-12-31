@@ -20,7 +20,7 @@
 [Empty] = '' <br>
 ПАРАМЕТРИЗУЕТСЯ: <br>
 [TableDelimeter] DEFAULT ',' <br>
-[AttributeTypeDelimeter] DEFAULT ',' <br>
+[AttributeTypeDelimeter] DEFAULT ':' <br>
 [ConnectionDenomination] DEFAULT 'CONNECTION' <br>
 [0.1Denomination] DEFAULT '0.1' <br>
 [0.NDenomination] DEFAULT '0.N' <br>
