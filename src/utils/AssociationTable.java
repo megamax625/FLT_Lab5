@@ -32,26 +32,44 @@ public class AssociationTable {
 
     public void print() {
         System.out.println("Outputting table " + this.name);
-        System.out.format("Primary Key 1: %s -- %s\n", PK1.name, PK1.type);
-        System.out.format("Primary Key 2: %s -- %s\n", PK2.name, PK2.type);
+        System.out.format("Primary Key 1: %s -- %s", PK1.name, PK1.type);
+        if (PK1.KeyStatus == -1) {
+            System.out.println("(FK)");
+        } else {
+            System.out.println();
+        }
+        System.out.format("Primary Key 2: %s -- %s", PK2.name, PK2.type);
+        if (PK2.KeyStatus == -1) {
+            System.out.println("(FK)");
+        } else {
+            System.out.println();
+        }
         System.out.println("Attributes:");
-        int inc = 1;
-        for (Table.Attribute attr : Attributes) {
-            System.out.format("%s -- %s", attr.name, attr.type);
-            if (attr.KeyStatus == -1) {
-                System.out.println("(FK)");
-            } else if (attr.KeyStatus == -2) {
-                System.out.format("(FK, AK%d.1)\n", inc);
-                inc += 1;
-            } else if (attr.KeyStatus > 0) {
-                System.out.format("(AK%d.%d)\n", inc, attr.KeyStatus);
-            } else {
-                System.out.println();
+        if (Attributes.isEmpty()) {
+            System.out.println("None");
+        } else {
+            int inc = 1;
+            for (Table.Attribute attr : Attributes) {
+                System.out.format("%s -- %s", attr.name, attr.type);
+                if (attr.KeyStatus == -1) {
+                    System.out.println("(FK)");
+                } else if (attr.KeyStatus == -2) {
+                    System.out.format("(FK, AK%d.1)\n", inc);
+                    inc += 1;
+                } else if (attr.KeyStatus > 0) {
+                    System.out.format("(AK%d.%d)\n", inc, attr.KeyStatus);
+                } else {
+                    System.out.println();
+                }
             }
         }
         System.out.println("Connections:");
-        for (Table.Connection conn : Connections) {
-            System.out.format("to %s with cardinality of %s\n", conn.destination, conn.connType);
+        if (Connections.isEmpty()) {
+            System.out.println("None");
+        } else {
+            for (Table.Connection conn : Connections) {
+                System.out.format("to %s with cardinality of %s\n", conn.destination, conn.connType);
+            }
         }
         System.out.println();
     }

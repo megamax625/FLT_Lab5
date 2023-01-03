@@ -21,12 +21,20 @@ public class Table {
             System.out.format("%s -- %s\n", IDAttr.name, IDAttr.type);
         }
         System.out.println("}\nAttributes:");
-        for (Attribute attr : Attributes) {
-            System.out.format("%s -- %s\n", attr.name, attr.type);
+        if (Attributes.isEmpty()) {
+            System.out.println("None");
+        } else {
+            for (Attribute attr : Attributes) {
+                System.out.format("%s -- %s\n", attr.name, attr.type);
+            }
         }
         System.out.println("Connections:");
-        for (Connection conn : Connections) {
-            System.out.format("to %s with cardinality of %s\n", conn.destination, conn.connType);
+        if (Connections.isEmpty()) {
+            System.out.println("None");
+        } else {
+            for (Connection conn : Connections) {
+                System.out.format("to %s with cardinality of %s\n", conn.destination, conn.connType);
+            }
         }
         System.out.println();
     }

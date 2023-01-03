@@ -21,7 +21,7 @@ Size :: float,
 Weight :: float,
 Exp_date :: datetime,
 Current_price :: money,
-WITH STORE M1,
+WITH Store M1,
 WITH Order ON,
 }
 NEXT
