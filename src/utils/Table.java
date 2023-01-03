@@ -34,10 +34,41 @@ public class Table {
     public static class Attribute {
         String name;
         String type;
-        int KeyStatus; // n = -1 => FK, n = 0 => NO, n >= 1 => AK1.n
+        int KeyStatus; // n = -1 => FK, n = -2 => (FK, AK1), n = 0 => NO, n >= 1 => AK1.
+
+        public Attribute(String name, String type, int KeyStatus) {
+            this.name = name;
+            this.type = type;
+            this.KeyStatus = KeyStatus;
+        }
+
+        public Attribute(String name, String type) {
+            this.name = name;
+            this.type = type;
+            this.KeyStatus = 0;
+        }
+
+        public Attribute() {
+            this.name = "";
+            this.type = "";
+            this.KeyStatus = 0;
+        }
     }
+
+
+
     public static class Connection {
         String destination;
-        String connType; // 1 = 0.1 | 2 = 0.N | 3 = 1.1 | 4 = 1.N
+        String connType;
+
+        public Connection() {
+            this.destination = "";
+            this.connType = "";
+        }
+
+        public Connection(String dest, String type) {
+            this.destination = dest;
+            this.connType = type;
+        }
     }
 }

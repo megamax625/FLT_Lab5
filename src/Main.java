@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import utils.*;
 
+import javax.management.relation.Relation;
+
 public class Main {
     public static void main(String[] args) {
 
@@ -62,6 +64,16 @@ public class Main {
 
         HashMap<String, String> parameters = Parser.ParseParameterizedTokens(syntaxInput);
         ArrayList<Table> tables = Parser.ParseTables(testInput, parameters);
+        ArrayList<RelationalTable> relationalTables = RelationalTable.RelationalTableFromArrayList(tables);
+        ArrayList<AssociationTable> associationTables = RelationalTable.GetForeignKeys(relationalTables);
+        System.out.println("Outputting result of relational conversion\nRelational tables:");
+        for (RelationalTable RT : relationalTables) {
+            RT.print();
+        }
+        if (!associationTables.isEmpty() )System.out.println("Association tables:");
+        for (AssociationTable AT : associationTables) {
+            AT.print();
+        }
     }
 
     private static String GetDefaultSyntax() {
