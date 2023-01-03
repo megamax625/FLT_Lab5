@@ -114,12 +114,9 @@ public class Parser {
         }
         System.out.println("Tokens:");
         for (String token : tokens) {
-            System.out.println(token + "\t NAME: " + isName(token, parameterMap) +
-                    " CARD: " + isCardinalityDenomination(token) + " ID: " +
-                    isID(token) + " TD: " + isTableDelimeter(token, parameterMap) + " AT:" +
-                    isAttributeTypeDelimeter(token, parameterMap) + " CD:" +
-                    isConnectionDenomination(token, parameterMap));
+            System.out.print(token + " ");
         }
+        System.out.println();
         return tokens;
     }
 
