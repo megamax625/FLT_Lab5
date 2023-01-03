@@ -1,6 +1,4 @@
 package utils;
-
-import java.security.Key;
 import java.util.ArrayList;
 
 public class RelationalTable {

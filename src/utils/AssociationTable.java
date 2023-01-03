@@ -1,6 +1,4 @@
 package utils;
-
-
 import java.util.ArrayList;
 
 // по сути шаблон сопряжение
