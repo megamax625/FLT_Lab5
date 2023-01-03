@@ -14,6 +14,23 @@ public class Table {
         this.Connections = new ArrayList<>();
     }
 
+    public void print() {
+        System.out.println("Outputting table " + this.name);
+        System.out.println("ID: {");
+        for (Attribute IDAttr : ID) {
+            System.out.format("%s -- %s\n", IDAttr.name, IDAttr.type);
+        }
+        System.out.println("}\nAttributes:");
+        for (Attribute attr : Attributes) {
+            System.out.format("%s -- %s\n", attr.name, attr.type);
+        }
+        System.out.println("Connections:");
+        for (Connection conn : Connections) {
+            System.out.format("to %s with cardinality of %s\n", conn.destination, conn.connType);
+        }
+        System.out.println();
+    }
+
     public static class Attribute {
         String name;
         String type;

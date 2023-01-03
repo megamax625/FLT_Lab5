@@ -15,7 +15,7 @@ public class Parser {
     public static String[] nonParametherizedConstantStuff = new String[]{"{", "}", "ID", ",",
             "int", "float", "money", "datetime", "char", "String"};
     private static final List<String> nonParamsList = Arrays.asList(nonParametherizedConstantStuff);
-    private static final List<String> cardinalityDenominations = new ArrayList<String>();
+    private static final List<String> cardinalityDenominations = new ArrayList<>();
 
     public static HashMap<String, String> ParseParameterizedTokens(String syntaxStr) {
         HashMap<String, String> ParameterizedTokens = new HashMap<>();
@@ -166,6 +166,16 @@ public class Parser {
         table.ID = ParseID(tokens, parameterMap);
         table.Attributes = ParseAttributes(tokens, parameterMap, 0);
         table.Connections = ParseConnections(tokens, parameterMap);
+        token = tokens.get(0);
+        System.out.println("Table parsing ended on token " + token);
+        if (isRightParenthesis(token)) {
+            System.out.println("Table parsed successfully:\n");
+            table.print();
+            tokens.remove(0);
+        } else {
+            System.out.println("Error: token " + token + " should be a RIGHT PARENTHESIS, but it isn't");
+            System.exit(6);
+        }
         return table;
     }
 
@@ -189,6 +199,8 @@ public class Parser {
         if (!isRightParenthesis(token)) {
             System.out.println("Error: token " + token + " should be an ID's RIGHT PARENTHESIS, but it isn't");
             System.exit(6);
+        } else {
+            tokens.remove(0);
         }
         return ID;
     }
@@ -233,8 +245,10 @@ public class Parser {
         token = tokens.get(0);
         if (!isAttributeDelimeter(token)) {
             System.out.println("Attribute parsing ended on token " + token + " which is not an ATTR DELIMETER (,) to a new attribute");
+        } else {
+            tokens.remove(0);
         }
-        tokens.remove(0);
+        System.out.format("Parsed attribute: name - %s, type - %s\n", res.name, res.type);
         return res;
     }
 
@@ -244,9 +258,9 @@ public class Parser {
         while (isConnectionDenomination(token, parameterMap)) {
             Table.Connection connection = ParseConnection(tokens, parameterMap);
             connections.add(connection);
+            token = tokens.get(0);
         }
-        token = tokens.get(0);
-        System.out.println("Connection parsing ended on token " + token + " which is not a CONN DENOMINATION for a new conection");
+        System.out.println("Connections parsing ended on token " + token + " which is not a CONN DENOMINATION for a new conection");
         return connections;
     }
 
@@ -267,8 +281,10 @@ public class Parser {
         }
         connection.connType = parameterMap.get(token);
         tokens.remove(0);
+        System.out.format("Connection parsed: destintion - %s, type - %s\n", connection.destination, connection.connType);
+        token = tokens.get(0);
         if (!isConnectionDelimeter(token)) {
-            System.out.println("Connections parsing ended on token " + token + " which is not an CONN DELIMETER (,) to a new connection");
+            System.out.println("Connection parsing ended on token " + token + " which is not an CONN DELIMETER (,) to a new connection");
         } else {
             tokens.remove(0);
         }
