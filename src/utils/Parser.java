@@ -165,7 +165,7 @@ public class Parser {
         token = tokens.get(0);
         System.out.println("Table parsing ended on token " + token);
         if (isRightParenthesis(token)) {
-            System.out.println("Table parsed successfully:\n");
+            System.out.println("\nTable parsed successfully:");
             table.print();
             tokens.remove(0);
         } else {

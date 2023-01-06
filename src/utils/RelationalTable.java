@@ -12,14 +12,16 @@ public class RelationalTable {
         this.Attributes = new ArrayList<>();
         this.Connections = new ArrayList<>();
         Connections = table.Connections;
+        System.out.println("\n\n ОГУЗОК");
+        table.print();
         if ((table.ID.size() == 1) && (table.ID.get(0).type.equals("int"))) {
             System.out.println("No need for surrogate key in table " + table.name);
             Attributes = table.Attributes;
             PK = table.ID.get(0);
         } else {
             PK = new Table.Attribute(table.name + "_surrogate_ID", "int");
-            Attributes = table.ID;
-            Attributes.addAll(table.Attributes);
+            Attributes = new ArrayList<>(table.ID);
+            Attributes.addAll(new ArrayList<>(table.Attributes));
         }
     }
 
