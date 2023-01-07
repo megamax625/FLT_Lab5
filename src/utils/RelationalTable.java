@@ -1,11 +1,13 @@
 package utils;
+
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class RelationalTable {
-    String name;
+    public String name;
     Table.Attribute PK;
-    ArrayList<Table.Attribute> Attributes;
-    ArrayList<Table.Connection> Connections;
+    public ArrayList<Table.Attribute> Attributes;
+    public ArrayList<Table.Connection> Connections;
 
     public RelationalTable(Table table) {
         this.name = table.name;
@@ -27,7 +29,7 @@ public class RelationalTable {
 
     public static ArrayList<RelationalTable> RelationalTableFromArrayList(ArrayList<Table> tables) {
         ArrayList<RelationalTable> RTs = new ArrayList<>();
-        for (Table table : tables){
+        for (Table table : tables) {
             RelationalTable RT = new RelationalTable(table);
             RTs.add(RT);
         }
@@ -37,11 +39,11 @@ public class RelationalTable {
     public static ArrayList<AssociationTable> GetForeignKeys(ArrayList<RelationalTable> RTs) {
         ArrayList<AssociationTable> ATs = new ArrayList<>();
         for (RelationalTable RT1 : RTs) {
-            for (Table.Connection conn1 : RT1.Connections) {
+            for (Table.Connection conn1 : new ArrayList<>(RT1.Connections)) {
                 for (RelationalTable RT2 : RTs) {
                     if ((RT1 != RT2) && (conn1.destination.equals(RT2.name))) {
                         Table.Connection back_conn = new Table.Connection();
-                        for (Table.Connection conn2 : RT2.Connections) {
+                        for (Table.Connection conn2 : new ArrayList<>(RT2.Connections)) {
                             if (conn2.destination.equals(RT1.name)) {
                                 back_conn = conn2;
                                 System.out.println("Matched connections from " + conn2.destination + " and " + conn1.destination);
@@ -58,13 +60,13 @@ public class RelationalTable {
                                 boolean hasFK = false;
                                 System.out.println("Checking 1-to-1 connection for 1 FK or inserting a new one");
                                 for (Table.Attribute attr : RT2.Attributes) {
-                                    if ((attr.KeyStatus == -1) && (attr.name.equals(RT1.PK.name))) {
+                                    if (((attr.KeyStatus == -1) || (attr.KeyStatus == -2)) && (attr.name.equals(RT1.PK.name))) {
                                         hasFK = true;
                                         break;
                                     }
                                 }
                                 if (!hasFK) {
-                                    RT1.Attributes.add(new Table.Attribute(RT2.PK.name, RT2.PK.type, -1));
+                                    RT1.Attributes.add(new Table.Attribute(RT2.PK.name, RT2.PK.type, -2));
                                     System.out.println("Adding FK " + RT2.PK.name + " to Table " + RT1.name);
                                 }
                             } else {
@@ -84,6 +86,8 @@ public class RelationalTable {
                                     System.out.println("Making association table from tables " + RT1.name + " and " + RT2.name + " since they are connected N-to-M");
                                     AssociationTable AT = new AssociationTable(RT1, RT2);
                                     ATs.add(AT);
+                                    RT1.Connections.removeIf(connection -> Objects.equals(connection.destination, RT2.name));
+                                    RT2.Connections.removeIf(connection -> Objects.equals(connection.destination, RT1.name));
                                 }
                             }
                         }
@@ -101,16 +105,14 @@ public class RelationalTable {
         if (Attributes.isEmpty()) {
             System.out.println("None");
         } else {
-            int inc = 1;
             for (Table.Attribute attr : Attributes) {
                 System.out.format("%s -- %s", attr.name, attr.type);
                 if (attr.KeyStatus == -1) {
                     System.out.println("(FK)");
                 } else if (attr.KeyStatus == -2) {
-                    System.out.format("(FK, AK%d.1)\n", inc);
-                    inc += 1;
+                    System.out.println("(FK, AK2.1)");
                 } else if (attr.KeyStatus > 0) {
-                    System.out.format("(AK%d.%d)\n", inc, attr.KeyStatus);
+                    System.out.format("(AK1.%d)\n", attr.KeyStatus);
                 } else {
                     System.out.println();
                 }
@@ -125,5 +127,28 @@ public class RelationalTable {
             }
         }
         System.out.println();
+    }
+
+    public String printToYML() {
+        String ret = "";
+        ret += "[" + this.name + "]\n";
+        ret += "    *" + PK.name + " {label: \"" + PK.type + "\"}\n";
+        if (Attributes.isEmpty()) {
+            ret += "    None";
+        } else {
+            for (Table.Attribute attr : Attributes) {
+                ret += "    " + attr.name + " {label: \"" + attr.type;
+                if (attr.KeyStatus == -1) {
+                    ret += "(FK)\"}\n";
+                } else if (attr.KeyStatus == -2) {
+                    ret += "(FK, AK2.1)\"}\n";
+                } else if (attr.KeyStatus > 0) {
+                    ret += "(AK1." + attr.KeyStatus + ")\"}\n";
+                } else {
+                    ret += "\"}\n";
+                }
+            }
+        }
+        return ret + "\n";
     }
 }

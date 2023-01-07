@@ -4,11 +4,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import utils.*;
 
 public class Main {
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws IOException {
         String testInput = null, syntaxInput = null;
 
         try {
@@ -64,14 +64,88 @@ public class Main {
         ArrayList<Table> tables = Parser.ParseTables(testInput, parameters);
         ArrayList<RelationalTable> relationalTables = RelationalTable.RelationalTableFromArrayList(tables);
         ArrayList<AssociationTable> associationTables = RelationalTable.GetForeignKeys(relationalTables);
+
         System.out.println("Outputting result of relational conversion\nRelational tables:");
         for (RelationalTable RT : relationalTables) {
             RT.print();
         }
-        if (!associationTables.isEmpty() )System.out.println("Association tables:");
+        if (!associationTables.isEmpty()) System.out.println("Association tables:");
         for (AssociationTable AT : associationTables) {
             AT.print();
         }
+        ArrayList<Relation> relationsER = new ArrayList<>();
+        for (Table table1: tables) {
+            for (Table.Connection connection: table1.Connections) {
+                for (Table table2: tables) {
+                    if (table1 != table2 && Objects.equals(connection.destination, table2.name)) {
+                        String connType2 = connection.connType;
+                        String connType1 = "";
+                        for (Table.Connection conn : table2.Connections) {
+                            if (Objects.equals(conn.destination, table1.name))
+                                 connType1 = conn.connType;
+                        }
+                        if (!relationsER.contains(new Relation(table1.name, table2.name,connTypeToYML(connType1), connTypeToYML(connType2))) || !relationsER.contains(new Relation(table2.name, table1.name,connTypeToYML(connType2),connTypeToYML(connType1)))){// не содержит связь table1.name-table2.name или наоборот
+                            relationsER.add(new Relation(table1.name, table2.name,connTypeToYML(connType1),connTypeToYML(connType2)));
+                        }
+                    }
+                }
+            }
+        }
+        ArrayList<Relation> relationsRelational = new ArrayList<>();
+        for (RelationalTable table1: relationalTables) {
+            for (Table.Connection connection: table1.Connections) {
+                for (RelationalTable table2: relationalTables) {
+                    if (table1 != table2 && Objects.equals(connection.destination, table2.name)) {
+                        String connType2 = connection.connType;
+                        String connType1 = "";
+                        for (Table.Connection conn : table2.Connections) {
+                            if (Objects.equals(conn.destination, table1.name))
+                                connType1 = conn.connType;
+                        }
+                        if (!relationsRelational.contains(new Relation(table1.name, table2.name,connTypeToYML(connType1), connTypeToYML(connType2))) || !relationsRelational.contains(new Relation(table2.name, table1.name,connTypeToYML(connType2),connTypeToYML(connType1)))){
+                            relationsRelational.add(new Relation(table1.name, table2.name,connTypeToYML(connType1),connTypeToYML(connType2)));
+                        }
+                    }
+                }
+            }
+        }
+        for (AssociationTable table1: associationTables) {
+            for (Table.Connection connection: table1.Connections) {
+                for (RelationalTable table2: relationalTables) {
+                    if (Objects.equals(connection.destination, table2.name)) {
+                        String connType2 = connection.connType;
+                        String connType1 = "";
+                        for (Table.Connection conn : table2.Connections) {
+                            System.out.println(conn.destination + " !!! " + table1.name);
+                            if (Objects.equals(conn.destination, table1.name)) {
+                                connType1 = conn.connType;
+                            }
+                        }
+                        if (!relationsRelational.contains(new Relation(table1.name, table2.name,connTypeToYML(connType1), connTypeToYML(connType2))) || !relationsRelational.contains(new Relation(table2.name, table1.name,connTypeToYML(connType2),connTypeToYML(connType1)))){
+                            relationsRelational.add(new Relation(table1.name, table2.name,connTypeToYML(connType1),connTypeToYML(connType2)));
+                        }
+                    }
+                }
+            }
+        }
+
+        YMLConverter.makeERdiagram(tables, relationsER);
+        YMLConverter.makeRelationalDiagram(relationalTables, associationTables, relationsRelational);
+        YMLConverter.generatePDFS();
+
+    }
+
+    private static String connTypeToYML(String connType) {
+        if (Objects.equals(connType, "0.1Denomination")) {
+            return "?";
+        } else if (Objects.equals(connType, "0.NDenomination")) {
+            return "*";
+        } else if (Objects.equals(connType, "1.1Denomination")) {
+            return "1";
+        } else if (Objects.equals(connType, "1.NDenomination")) {
+            return "+";
+        }
+        return "ERROR";
     }
 
     private static String GetDefaultSyntax() {

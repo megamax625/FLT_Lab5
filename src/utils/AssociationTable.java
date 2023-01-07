@@ -1,12 +1,13 @@
 package utils;
+
 import java.util.ArrayList;
 
 // по сути шаблон сопряжение
 public class AssociationTable {
-    String name;
+    public String name;
     Table.Attribute PK1, PK2;
     ArrayList<Table.Attribute> Attributes;
-    ArrayList<Table.Connection> Connections;
+    public ArrayList<Table.Connection> Connections;
 
     public AssociationTable(RelationalTable RT1, RelationalTable RT2) {
         this.name = RT1.name + "_" + RT2.name;
@@ -21,11 +22,13 @@ public class AssociationTable {
         RT1.Connections.remove(new Table.Connection(RT2.name, "0.1Denomination"));
         RT1.Connections.remove(new Table.Connection(RT2.name, "0.NDenomination"));
         RT1.Connections.remove(new Table.Connection(RT2.name, "1.1Denomination"));
-        RT1.Connections.remove(new Table.Connection(RT2.name, "0.NDenomination"));
+        RT1.Connections.remove(new Table.Connection(RT2.name, "1.NDenomination"));
         RT2.Connections.remove(new Table.Connection(RT1.name, "0.1Denomination"));
         RT2.Connections.remove(new Table.Connection(RT1.name, "0.NDenomination"));
         RT2.Connections.remove(new Table.Connection(RT1.name, "1.1Denomination"));
-        RT2.Connections.remove(new Table.Connection(RT1.name, "0.NDenomination"));
+        RT2.Connections.remove(new Table.Connection(RT1.name, "1.NDenomination"));
+        RT1.Connections.add(new Table.Connection(this.name, "0.NDenomination"));
+        RT2.Connections.add(new Table.Connection(this.name, "0.NDenomination"));
     }
 
     public void print() {
@@ -46,16 +49,14 @@ public class AssociationTable {
         if (Attributes.isEmpty()) {
             System.out.println("None");
         } else {
-            int inc = 1;
             for (Table.Attribute attr : Attributes) {
                 System.out.format("%s -- %s", attr.name, attr.type);
                 if (attr.KeyStatus == -1) {
                     System.out.println("(FK)");
                 } else if (attr.KeyStatus == -2) {
-                    System.out.format("(FK, AK%d.1)\n", inc);
-                    inc += 1;
+                    System.out.println("(FK, AK2.1)");
                 } else if (attr.KeyStatus > 0) {
-                    System.out.format("(AK%d.%d)\n", inc, attr.KeyStatus);
+                    System.out.format("(AK1.%d)\n", attr.KeyStatus);
                 } else {
                     System.out.println();
                 }
@@ -71,4 +72,31 @@ public class AssociationTable {
         }
         System.out.println();
     }
+
+    public String printToYML() {
+        String ret = "";
+        ret += "[" + this.name + "]\n";
+        ret += "    *" + PK1.name + " {label: \"" + PK1.type + "\"}\n";
+        ret += "    *" + PK2.name + " {label: \"" + PK2.type + "\"}\n";
+        if (Attributes.isEmpty()) {
+            ret += "    None";
+        } else {
+            int inc = 1;
+            for (Table.Attribute attr : Attributes) {
+                ret += "    " + attr.name + " {label: \"" + attr.type;
+                if (attr.KeyStatus == -1) {
+                    ret += "(FK)\"}\n";
+                } else if (attr.KeyStatus == -2) {
+                    ret += "(FK, AK" + inc + ".1)\"}\n";
+                    inc += 1;
+                } else if (attr.KeyStatus > 0) {
+                    ret += "(AK" + inc + "." + attr.KeyStatus + ")\"}\n";
+                } else {
+                    ret += "\"}\n";
+                }
+            }
+        }
+        return ret + "\n";
+    }
 }
+

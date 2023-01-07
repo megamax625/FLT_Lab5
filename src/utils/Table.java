@@ -1,11 +1,12 @@
 package utils;
+
 import java.util.ArrayList;
 
 public class Table {
-    String name;
+    public String name;
     ArrayList<Attribute> ID;
     ArrayList<Attribute> Attributes;
-    ArrayList<Connection> Connections;
+    public ArrayList<Connection> Connections;
 
     public Table(String name) {
         this.name = name;
@@ -64,10 +65,9 @@ public class Table {
     }
 
 
-
     public static class Connection {
-        String destination;
-        String connType;
+        public String destination;
+        public String connType;
 
         public Connection() {
             this.destination = "";
