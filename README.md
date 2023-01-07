@@ -48,12 +48,21 @@
 - ```1.1Denomination``` - обозначение кардинальности 1.1
 - ```1.NDenomination``` - обозначение кардинальности 1.N <br>
 
-Строки в файле ```syntax.txt``` разделяются знаком ```~```. Нельзя использовать строковые значения с знаками ```=``` и ```~```. <br>
+Значения по умолчанию:
+- ```TableDelimeter``` = ,
+- ```AttributeTypeDelimeter``` = :
+- ```ConnectionDenomination``` = CONNECTION
+- ```0.1Denomination``` = 0.1
+- ```0.NDenomination``` = 0.N
+- ```1.1Denomination``` = 1.1
+- ```1.NDenomination``` = 1.N <br>
+
+Строки в файле ```syntax.txt``` разделяются знаком ```~```. Парметры задаются строками вида ```параметр = значение ~```. Нельзя использовать строковые значения с знаками ```=``` и ```~```. <br>
 
 ## Вывод программы
 После запуска программы создается папка ```output```, в которой создаются файлы ```er_diagram.pdf``` и ```relational_diagram.pdf```, в которых сгенерированы диаграммы "сущность-связь" и реляционные диаграммы соответственно. <br>
 
 ## Необходимые установки
 - [eralchemy](https://pypi.org/project/ERAlchemy/) : через ```pip install eralchemy```. Для отрисовки диаграмм;
-- pygraphviz : через ```pip install pygraphviz```. Без него у меня не устанавливался eralchemy.
-- libgraphviz-dev : через ```sudo apt-get install libgraphviz-dev```. Без него у меня не устанвливался pygraphviz.
+- pygraphviz : через ```pip install pygraphviz```. Без него не устанавливался eralchemy.
+- libgraphviz-dev : через ```sudo apt-get install libgraphviz-dev```. Без него не устанвливался pygraphviz.
