@@ -62,18 +62,8 @@ public class Main {
 
         HashMap<String, String> parameters = Parser.ParseParameterizedTokens(syntaxInput);
         ArrayList<Table> tables = Parser.ParseTables(testInput, parameters);
-        System.out.println("Outputting result of table parsing\nTables:");
-        for (Table T : tables) {
-            T.print();
-        }
-
         ArrayList<RelationalTable> relationalTables = RelationalTable.RelationalTableFromArrayList(tables);
         ArrayList<AssociationTable> associationTables = RelationalTable.GetForeignKeys(relationalTables);
-        System.out.println("Outputting tables after AT conv\nTables:");
-        for (Table T : tables) {
-            T.print();
-        }
-
         System.out.println("Outputting result of relational conversion\nRelational tables:");
         for (RelationalTable RT : relationalTables) {
             RT.print();
