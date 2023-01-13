@@ -1,15 +1,41 @@
-Abirvalg {
+Store {
+
 ID {
-amogus: money
+
+Location :: String }
+
+Work_Hours :: String,
+
+Phone_Number :: String,
+
+Capacity :: float,
+
+WITH Goods ON
+
 }
-beaver: String
-CONNECTION Sus 1.1
-}
-,
-Sus {
+
+NEXT
+
+Goods {
+
 ID {
-Sharikovh : String
+
+Article_Number :: int,
+
+Batch_Number :: int
+
 }
-commi : int
-CONNECTION Abirvalg 1.1
+
+Title :: String,
+
+Description :: String,
+
+Size :: float,
+
+Weight :: float,
+
+Exp_date :: datetime,
+
+Current_price :: money,
+
 }

@@ -13,8 +13,7 @@ public class RelationalTable {
         this.name = table.name;
         this.Attributes = new ArrayList<>();
         this.Connections = new ArrayList<>();
-        Connections = table.Connections;
-        System.out.println("\n\n ОГУЗОК");
+        Connections = new ArrayList<>(table.Connections);
         table.print();
         if ((table.ID.size() == 1) && (table.ID.get(0).type.equals("int"))) {
             System.out.println("No need for surrogate key in table " + table.name);
@@ -133,6 +132,7 @@ public class RelationalTable {
         String ret = "";
         ret += "[" + this.name + "]\n";
         ret += "    *" + PK.name + " {label: \"" + PK.type + "\"}\n";
+        int fkAmount = 0;
         if (Attributes.isEmpty()) {
             ret += "    None";
         } else {
@@ -141,7 +141,8 @@ public class RelationalTable {
                 if (attr.KeyStatus == -1) {
                     ret += "(FK)\"}\n";
                 } else if (attr.KeyStatus == -2) {
-                    ret += "(FK, AK2.1)\"}\n";
+                    fkAmount += 1;
+                    ret += String.format("(FK, AK%d.1)\"}\n", fkAmount+1);
                 } else if (attr.KeyStatus > 0) {
                     ret += "(AK1." + attr.KeyStatus + ")\"}\n";
                 } else {
