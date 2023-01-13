@@ -115,7 +115,6 @@ public class Main {
                         String connType2 = connection.connType;
                         String connType1 = "";
                         for (Table.Connection conn : table2.Connections) {
-                            System.out.println(conn.destination + " !!! " + table1.name);
                             if (Objects.equals(conn.destination, table1.name)) {
                                 connType1 = conn.connType;
                             }
