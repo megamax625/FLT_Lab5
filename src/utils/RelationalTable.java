@@ -77,14 +77,14 @@ public class RelationalTable {
                             if (back_conn.connType.equals("0.NDenomination") || back_conn.connType.equals("1.NDenomination")) {
                                 boolean hasAT = false;
                                 for (AssociationTable AT : ATs) {
-                                    if (AT.name.equals(RT1.name + "_" + RT2.name) || AT.name.equals(RT2.name + "_" + RT1.name)) {
+                                    if (AT.name.startsWith(RT1.name + "_" + RT2.name) || AT.name.startsWith(RT2.name + "_" + RT1.name)) {
                                         hasAT = true;
                                         break;
                                     }
                                 }
                                 if (!hasAT) {
                                     System.out.println("Making association table from tables " + RT1.name + " and " + RT2.name + " since they are connected N-to-M");
-                                    AssociationTable AT = new AssociationTable(RT1, RT2);
+                                    AssociationTable AT = new AssociationTable(RT1, RT2, RTs, ATs);
                                     ATs.add(AT);
                                     RT1.Connections.removeIf(connection -> Objects.equals(connection.destination, RT2.name));
                                     RT2.Connections.removeIf(connection -> Objects.equals(connection.destination, RT1.name));

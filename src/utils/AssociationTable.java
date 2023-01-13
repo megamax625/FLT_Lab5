@@ -1,6 +1,7 @@
 package utils;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 // по сути шаблон сопряжение
 public class AssociationTable {
@@ -9,8 +10,26 @@ public class AssociationTable {
     ArrayList<Table.Attribute> Attributes;
     public ArrayList<Table.Connection> Connections;
 
-    public AssociationTable(RelationalTable RT1, RelationalTable RT2) {
+    public AssociationTable(RelationalTable RT1, RelationalTable RT2, ArrayList<RelationalTable> RTs, ArrayList<AssociationTable> ATs) {
         this.name = RT1.name + "_" + RT2.name;
+        boolean nameIsUnique = false;
+        while (!nameIsUnique) {
+            boolean noSameNameFound = true;
+            for (RelationalTable RT : RTs) {
+                if (Objects.equals(RT.name, this.name)) {
+                    noSameNameFound = false;
+                    break;
+                }
+            }
+            for (AssociationTable AT : ATs) {
+                if (Objects.equals(AT.name, this.name)) {
+                    noSameNameFound = false;
+                    break;
+                }
+            }
+            if (!noSameNameFound) this.name += "_1";
+            else nameIsUnique = true;
+        }
         PK1 = RT1.PK;
         PK1.KeyStatus = -1;
         PK2 = RT2.PK;
