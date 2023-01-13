@@ -1,0 +1,15 @@
+Abirvalg {
+ID {
+amogus: money
+}
+beaver: String
+CONNECTION Sus 1.1
+}
+,
+Sus {
+ID {
+Sharikovh : String
+}
+commi : int
+CONNECTION Abirvalg 1.1
+}
